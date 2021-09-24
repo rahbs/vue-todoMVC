@@ -8,8 +8,7 @@
           @click-delete-btn = "deleteTodoItem"
           @update-todo="updateTodoItem"
     />
-    <Footer :class="todos.length === 0? 'hidden':''"
-            :todo-count="countTodoLeft"
+    <Footer :todo-count="countTodoLeft"
             :view-mode="viewMode"
             :clear-completed-flag="clearCompletedFlag"
             @select-view-mode="setViewMode"
