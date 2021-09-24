@@ -20,6 +20,7 @@ export default {
       todoCount: String,
       viewMode: String,
       clearCompletedFlag: Boolean,
+
     }
 }
 </script>

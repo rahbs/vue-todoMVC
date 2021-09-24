@@ -14,6 +14,7 @@
             :clear-completed-flag="clearCompletedFlag"
             @select-view-mode="setViewMode"
             @click-clear-completed="deleteCompletedTodoItems"
+            v-show="checkTodoExists"
     />
   </section>
 </template>
@@ -48,6 +49,9 @@ export default {
       }
       if (cnt > 1) return cnt+' items left';
       else return cnt+' item left';
+    },
+    checkTodoExists(){
+      return this.todos.length > 0;
     }
   },
   methods:{
