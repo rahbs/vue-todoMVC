@@ -83,7 +83,6 @@ export default {
         }
 
       }
-      console.log(id);
       this.setVisibleTodos()
       this.updateFlags();
 
@@ -103,7 +102,6 @@ export default {
     updateTodoItem(id, details){
       this.todos[id].details = details; //고치기
       this.setVisibleTodos()
-
     },
     setViewMode(mode){
       this.viewMode = mode;

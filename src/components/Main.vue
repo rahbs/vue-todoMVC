@@ -8,15 +8,14 @@
         @click="$emit('click-toggle-all-btn',$event.target.checked)"
     />
     <label for="toggle-all"></label>
-    <ul class="todo-list" v-for="todo in todos" :key="todo.id">
+    <ul class="todo-list">
       <TodoItem
-          :id="todo.id"
-          :details="todo.details"
-          :status="todo.status"
+          :todos="todos"
           @click-toggle-btn="toggle"
           @click-delete-btn="deleteTodoItem"
           @input-edit="inputEdit"
           @update-todo="updateTodoItem"
+          @cancel-edit="cancelEdit"
       />
     </ul>
   </section>
@@ -35,6 +34,7 @@ export default {
   data(){
     return {
       editInput: "",
+
     }
   },
   methods:{
@@ -47,9 +47,16 @@ export default {
     updateTodoItem(id){
       this.$emit('edit-todo', id, this.editInput);
     },
-    inputEdit(edit){
-      this.editInput=edit;
-    }
+    inputEdit(todo){
+      this.editInput=todo;
+    },
+
+    cancelEdit(todo){
+      this.editedTodo = null;
+      todo.details = this.beforeEditCache;
+    },
+
+
   }
 }
 </script>
