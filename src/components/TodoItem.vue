@@ -10,19 +10,16 @@
                :checked="todo.status"
                @click="$emit('click-toggle-btn', todo.id)"
         />
-        <label @dblclick=editTodo(todo)>{{todo.details}}</label>
+        <label @dblclick="editTodo(todo)">{{todo.details}}</label>
         <button class="destroy" @click="$emit('click-delete-btn', todo.id)"></button>
       </div>
       <input class="edit"
              type="text"
              :value="todo.details"
-             @input = "$emit('input-edit', todo, editedTodo)"
-             @keyup.enter="$emit('update-todo', todo, editedTodo)"
-             @blur="$emit('update-todo', todo, editedTodo)"
-             @keyup.esc="$emit('cancel-edit',todo, editedTodo)"
+             @input = "$emit('input-edit',$event.target.value)"
+             @keyup.enter="doneEdit(todo.id)"
+             @blur="$emit('update-todo', todo.id)"
       />
-
-  <!--        v-todo-focus="todo == editedTodo"-->
     </li>
   </section>
 </template>
@@ -32,19 +29,23 @@ export default {
   name: "TodoItem",
   data(){
     return{
-      beforeEditCache:"",
-      editedTodo:""
+      editedTodo:{},
     }
   },
   props:{
     todos:Array,
   },
   methods:{
-    editTodo(todo){ // 이부분을 밖으로 빼야할 것 같음
-      this.beforeEditCache = todo.details;
+    editTodo(todo){
       this.editedTodo = todo;
-      console.log("dblclick");
     },
+    doneEdit(id){
+      this.$emit('update-todo', id);
+      if (!this.editedTodo) {
+        return;
+      }
+      this.editedTodo = null;
+    }
   }
 }
 </script>

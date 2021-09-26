@@ -61,7 +61,7 @@ export default {
 
       for(const elem of this.todos){
         // update clearCompletedFlag
-        if(elem.status  === true) ccFlag = true; //하나라도 true 이면 true
+        if(elem.status  === true) ccFlag = true; // 하나라도 true 이면 true
         // update allCompletedFlag
         if(elem.status === false) acFlag = false; // 하나라도 false이면 false
       }
@@ -81,11 +81,9 @@ export default {
           elem.status = elem.status === false;
           break;
         }
-
       }
       this.setVisibleTodos()
       this.updateFlags();
-
     },
     toggleAllStatus(){
       this.allCompletedFlag = this.allCompletedFlag === false;
@@ -97,10 +95,14 @@ export default {
       this.todos.splice(id, 1);
       this.updateFlags();
       this.setVisibleTodos()
-
     },
     updateTodoItem(id, details){
-      this.todos[id].details = details; //고치기
+      for(const elem of this.todos) {
+        if (elem.id === id) {
+          elem.details = details;
+          break;
+        }
+      }
       this.setVisibleTodos()
     },
     setViewMode(mode){
@@ -120,7 +122,6 @@ export default {
       this.setVisibleTodos()
       this.updateFlags();
     }
-
   }
 }
 </script>

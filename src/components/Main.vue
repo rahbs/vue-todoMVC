@@ -15,7 +15,6 @@
           @click-delete-btn="deleteTodoItem"
           @input-edit="inputEdit"
           @update-todo="updateTodoItem"
-          @cancel-edit="cancelEdit"
       />
     </ul>
   </section>
@@ -34,7 +33,6 @@ export default {
   data(){
     return {
       editInput: "",
-
     }
   },
   methods:{
@@ -45,18 +43,11 @@ export default {
       this.$emit('click-delete-btn', id);
     },
     updateTodoItem(id){
-      this.$emit('edit-todo', id, this.editInput);
+      this.$emit('update-todo', id, this.editInput);
     },
     inputEdit(todo){
       this.editInput=todo;
-    },
-
-    cancelEdit(todo){
-      this.editedTodo = null;
-      todo.details = this.beforeEditCache;
-    },
-
-
+    }
   }
 }
 </script>
