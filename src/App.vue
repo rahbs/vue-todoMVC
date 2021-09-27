@@ -54,18 +54,10 @@ export default {
   methods:{
     // update allCompletedFlag, clearCompletedFlag
     updateFlags(){
-      let ccFlag = false; // clearCompletedFlag
-      let acFlag = true; // allCompletedFlag
-
-      for(const elem of this.todos){
-        // update clearCompletedFlag
-        if(elem.status  === true) ccFlag = true; // 하나라도 true 이면 true
-        // update allCompletedFlag
-        if(elem.status === false) acFlag = false; // 하나라도 false이면 false
-      }
-
-      this.clearCompletedFlag = ccFlag;
-      this.allCompletedFlag = acFlag;
+      // 하나라도 true 이면 true
+      this.clearCompletedFlag  = this.todos.some((todo)=>todo.status === true);
+      // 하나라도 false이면 false
+      this.allCompletedFlag = !this.todos.some((todo)=>todo.status === false);
     },
     addTodo(todo){
       this.todos.push({id:this.id++,details:todo,status:false});
