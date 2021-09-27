@@ -42,10 +42,8 @@ export default {
   },
   computed:{
     countTodoLeft(){
-      let cnt = 0;
-      for(const elem of this.todos){
-        if(elem.status == false) cnt++;
-      }
+      let cnt = this.todos.filter((todo)=>todo.status == false).length;
+
       if (cnt > 1) return cnt+' items left';
       else return cnt+' item left';
     },
@@ -76,12 +74,8 @@ export default {
       this.updateFlags();
     },
     toggleStatus(id){
-      for(const elem of this.todos){
-        if(elem.id === id) {
-          elem.status = elem.status === false;
-          break;
-        }
-      }
+      let todo = this.todos.find((todos)=>todos.id===id)
+      todo.status = todo.status === false;
       this.setVisibleTodos()
       this.updateFlags();
     },
@@ -97,12 +91,8 @@ export default {
       this.setVisibleTodos()
     },
     updateTodoItem(id, details){
-      for(const elem of this.todos) {
-        if (elem.id === id) {
-          elem.details = details;
-          break;
-        }
-      }
+      let todo = this.todos.find((todos)=>todos.id===id)
+      todo.details = details;
       this.setVisibleTodos()
     },
     setViewMode(mode){
