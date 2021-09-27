@@ -56,8 +56,8 @@ export default {
     updateFlags(){
       // 하나라도 true 이면 true
       this.clearCompletedFlag  = this.todos.some((todo)=>todo.status === true);
-      // 하나라도 false이면 false
-      this.allCompletedFlag = !this.todos.some((todo)=>todo.status === false);
+      // 모두 true 이면 true
+      this.allCompletedFlag = this.todos.every((todo)=>todo.status === true);
     },
     addTodo(todo){
       this.todos.push({id:this.id++,details:todo,status:false});
