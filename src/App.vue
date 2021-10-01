@@ -22,6 +22,7 @@
 import Header from './components/Header.vue'
 import Main from './components/Main.vue'
 import Footer from './components/Footer.vue'
+import {getTodos,postTodo,patchTodo,deleteTodo} from './service/todo-service.js'
 
 export default {
   name: 'App',
@@ -39,6 +40,9 @@ export default {
       clearCompletedFlag : false,
       viewMode : 'All',
     }
+  },
+  async mounted(){
+    await this.synchronizeTodos();
   },
   computed:{
     countTodoLeft(){
@@ -59,33 +63,37 @@ export default {
       // 모두 true 이면 true
       this.allCompletedFlag = this.todos.every((todo)=>todo.status === true);
     },
-    addTodo(todo){
-      this.todos.push({id:this.id++,details:todo,status:false});
-      this.allCompletedFlag=false;
+    async synchronizeTodos(){
+      this.todos = await getTodos();
       this.setVisibleTodos()
       this.updateFlags();
     },
-    toggleStatus(id){
-      let todo = this.todos.find((todos)=>todos.id===id)
-      todo.status = todo.status === false;
-      this.setVisibleTodos()
-      this.updateFlags();
+    async addTodo(todo){
+      await postTodo({details:todo,status:"active"});
+      await this.synchronizeTodos();
     },
-    toggleAllStatus(){
-      this.allCompletedFlag = this.allCompletedFlag === false;
-      this.todos.forEach(elem => elem.status = this.allCompletedFlag);
-      this.setVisibleTodos()
-      this.updateFlags();
+    async toggleStatus(id){
+      let todo = this.todos.find((todo)=>todo.id===id)
+      const toggledStatus = todo.status ? 'active':'done';
+      await patchTodo(id,{status:toggledStatus});
+      await this.synchronizeTodos();
     },
-    deleteTodoItem(id){
-      this.todos.splice(id, 1);
-      this.updateFlags();
-      this.setVisibleTodos()
+    async toggleAllStatus(){
+      await Promise.all(this.todos.map((todos) => this.toggleStatus(todos.id)));
+      await this.synchronizeTodos();
     },
-    updateTodoItem(id, details){
-      let todo = this.todos.find((todos)=>todos.id===id)
-      todo.details = details;
-      this.setVisibleTodos()
+    async deleteTodoItem(id){
+      await deleteTodo(id);
+      await this.synchronizeTodos();
+    },
+    async deleteCompletedTodoItems(){
+      const completedTodos = this.todos.filter(todo => todo.status === true);
+      await Promise.all(completedTodos.map((todos) => deleteTodo(todos.id)));
+      await this.synchronizeTodos();
+    },
+    async updateTodoItem(id, details){
+      await patchTodo(id,{details:details});
+      await this.synchronizeTodos();
     },
     setViewMode(mode){
       this.viewMode = mode;
@@ -98,11 +106,6 @@ export default {
         this.visibleTodos = this.todos.filter(todo => todo.status == false);
       else if(this.viewMode == 'Completed')
         this.visibleTodos = this.todos.filter(todo => todo.status == true);
-    },
-    deleteCompletedTodoItems(){
-      this.todos = this.todos.filter(todo => todo.status == false);
-      this.setVisibleTodos()
-      this.updateFlags();
     }
   }
 }
